@@ -1,0 +1,25 @@
+---
+
+- name: Ensure Jenkins repo is installed.
+  get_url:
+    url: http://pkg.jenkins-ci.org/redhat/jenkins.repo
+    dest: /etc/yum.repos.d/jenkins.repo
+
+- name: Ensure Jenkins key
+  command: rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
+
+- name: Java installed
+  yum: name=java-1.8.0-openjdk state=latest update_cache=yes
+  
+- name: Jenkins installed
+  yum: name=jenkins state=latest update_cache=yes
+
+# iptables action parameter in upcoming version 2.2
+# name: Allow port 8080
+#iptables: chain=INPUT action=insert protocol=tcp destination_port=8080 jump=ACCEPT
+
+- name: iptables service stop
+  service: name=iptables state=stopped enabled=no
+
+- name: Jenkins service start
+  service: name=jenkins state=started enabled=yes

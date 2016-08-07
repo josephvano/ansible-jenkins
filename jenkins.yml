@@ -1,0 +1,11 @@
+---
+- name: Jenkins
+  hosts: all
+  become: true
+  gather_facts: True
+  tasks:
+    - debug: msg="Install latest Jenkins release"
+
+  roles:
+    - jenkins 
+    - nginx
